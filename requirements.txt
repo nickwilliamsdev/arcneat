@@ -1,0 +1,8 @@
+torch
+numpy
+arckit
+tqdm
+gymnasium
+neat-python
+# Requires fetching PyTorch-NEAT separately:
+# pip install git+https://github.com/uber-research/PyTorch-NEAT.git
