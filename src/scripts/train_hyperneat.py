@@ -48,7 +48,7 @@ def main():
     p.add_reporter(stats)
     
     # Save checkpoints periodically natively via NEAT-Python
-    checkpoint_reporter = neat.Checkpointer(generation_interval=50, filename_prefix=f"{args.ckpt_dir}/hyperneat-chkpt-")
+    checkpoint_reporter = neat.Checkpointer(generation_interval=5, filename_prefix=f"{args.ckpt_dir}/hyperneat-chkpt-")
     p.add_reporter(checkpoint_reporter)
 
     builder = HyperNEATDeltaNetBuilder(
