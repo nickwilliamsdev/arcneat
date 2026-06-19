@@ -77,6 +77,17 @@ class Node:
         xs: list of torch tensors
         """
         if not xs:
+            # If this node has no inputs, create a constant tensor on the same
+            # device/dtype as current leaf activations (when available).
+            ref = None
+            if self.leaves is not None:
+                for leaf in self.leaves.values():
+                    if leaf.activs is not None:
+                        ref = leaf.activs
+                        break
+
+            if ref is not None:
+                return torch.full(shape, self.bias, device=ref.device, dtype=ref.dtype)
             return torch.full(shape, self.bias)
         inputs = [w * x for w, x in zip(self.weights, xs)]
         try:
