@@ -275,3 +275,37 @@ def get_coord_inputs(in_coords, out_coords, batch_size=None):
         y_in = in_coords[:, 1].unsqueeze(0).expand(n_out, n_in)
 
     return (x_out, y_out), (x_in, y_in)
+
+def get_coord_inputs_3d(in_coords, out_coords, batch_size=None):
+    """
+    3D substrate variant of get_coord_inputs.
+
+    in_coords:  (n_in,  3) float tensor  — columns are (x, y, z)
+    out_coords: (n_out, 3) float tensor  — columns are (x, y, z)
+
+    Returns:
+        (x_out, y_out, z_out), (x_in, y_in, z_in)
+    each tensor shape (n_out, n_in) or (batch, n_out, n_in).
+    """
+    n_in  = len(in_coords)
+    n_out = len(out_coords)
+
+    if batch_size is not None:
+        in_coords  = in_coords.unsqueeze(0).expand(batch_size, n_in,  3)
+        out_coords = out_coords.unsqueeze(0).expand(batch_size, n_out, 3)
+
+        x_out = out_coords[:, :, 0].unsqueeze(2).expand(batch_size, n_out, n_in)
+        y_out = out_coords[:, :, 1].unsqueeze(2).expand(batch_size, n_out, n_in)
+        z_out = out_coords[:, :, 2].unsqueeze(2).expand(batch_size, n_out, n_in)
+        x_in  = in_coords[:, :, 0].unsqueeze(1).expand(batch_size, n_out, n_in)
+        y_in  = in_coords[:, :, 1].unsqueeze(1).expand(batch_size, n_out, n_in)
+        z_in  = in_coords[:, :, 2].unsqueeze(1).expand(batch_size, n_out, n_in)
+    else:
+        x_out = out_coords[:, 0].unsqueeze(1).expand(n_out, n_in)
+        y_out = out_coords[:, 1].unsqueeze(1).expand(n_out, n_in)
+        z_out = out_coords[:, 2].unsqueeze(1).expand(n_out, n_in)
+        x_in  = in_coords[:, 0].unsqueeze(0).expand(n_out, n_in)
+        y_in  = in_coords[:, 1].unsqueeze(0).expand(n_out, n_in)
+        z_in  = in_coords[:, 2].unsqueeze(0).expand(n_out, n_in)
+
+    return (x_out, y_out, z_out), (x_in, y_in, z_in)
